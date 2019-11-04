@@ -165,12 +165,12 @@ function loadMenu() {
         data: {
             userId: uid,
         },
-        // beforeSend: function (request) {
-        //     request.setRequestHeader("X-Auth-Token", u_tokenId);
-        //     request.setRequestHeader("X-User-Id", uid);
-        //     request.setRequestHeader("Device-Type", "web");
-        //     request.setRequestHeader("App-Version", "1.0.0");//App-Version abc
-        // },
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", u_tokenId);
+            request.setRequestHeader("X-User-Id", uid);
+            request.setRequestHeader("Device-Type", "web");
+            request.setRequestHeader("App-Version", "1.0.0");//App-Version abc
+        },
         success: function (data) { 
             console.log(data);
             localStorage.setItem("DO", JSON.stringify(data));
@@ -238,7 +238,26 @@ function loadMenu() {
                         $("a.J_menuItem[data-menu-id=" + sel_menu_id + "]").parent().parent().parent().parent().parent().addClass('active');
                     }
                 }
-            }
+
+            } else if(data.code == -2) { //未登录-2，
+                
+                console.log("tonken验证失败，返回登录界面，msg:" + data.msg);
+                $.cookie('is_login', '', { path: "/", expires: 7 });
+                $.cookie('u_id', '', { path: "/", expires: 7 });
+                $.cookie('u_name', '', { path: "/", expires: 7 });
+                $.cookie('m_id', '', { path: "/", expires: 7 });
+                location.href = "/html/login.html";
+
+            } else if (data.code == -1) { //参数不合法-1
+                
+                console.log("没有权限访问，返回登录界面，msg:" + data.msg);
+                $.cookie('is_login', '', { path: "/", expires: 7 });
+                $.cookie('u_id', '', { path: "/", expires: 7 });
+                $.cookie('u_name', '', { path: "/", expires: 7 });
+                $.cookie('m_id', '', { path: "/", expires: 7 });
+                location.href = "/html/login.html";
+
+            } 
         }
     });
 }

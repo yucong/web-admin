@@ -17,7 +17,7 @@ define(function (require) {
                 var search_nc_name = $("#search_cn_name").val();
                 var search_username = $("#search_username").val();
                 SYS.Core.ajaxGet({
-                    url: "permission/sys/user/list",
+                    url: "user/list",
                     data: {
                         page: pageNumber ? pageNumber : 1,
                         size: pageSize ? pageSize : 20
@@ -50,23 +50,23 @@ define(function (require) {
                                 checkbox: true
                             },
                             {
-                                field: 'phone',
+                                field: 'username',
                                 title: '用户名',
                                 align: 'center'
                             },
-                            {
-                                field: 'nickName',
-                                title: '昵称',
-                                align: 'center'
-                            },
-                            {
-                                field: 'createTime',
-                                title: '创建时间',
-                                align: 'center',
-                                formatter: function (time) {
-                                    return SYS.Tool.formatterTime(time);
-                                }
-                            },
+                            // {
+                            //     field: 'username',
+                            //     title: '昵称',
+                            //     align: 'center'
+                            // },
+                            // {
+                            //     field: 'createTime',
+                            //     title: '创建时间',
+                            //     align: 'center',
+                            //     formatter: function (time) {
+                            //         return SYS.Tool.formatterTime(time);
+                            //     }
+                            // },
                             {
                                 field: 'do',
                                 title: '操作',
@@ -154,7 +154,7 @@ define(function (require) {
             toEdit: function (index) {
                 var obj = current_show_data[index];
                 $("#fm input[name='id']").val(obj.id);
-                $("#fm input[name='username']").val(obj.phone);
+                $("#fm input[name='username']").val(obj.username);
                 $("#fm #nickname").val(obj.nickName);
                 $('#myModal').modal('show');
             },
@@ -162,7 +162,7 @@ define(function (require) {
                 var that = this;
                 $.messager.confirm("确定要删除吗？", function () {
                     SYS.Core.ajaxPost({
-                        url: "permission/sys/user/delete",
+                        url: "user/delete",
                         data: {
                             id: +id
                         },
@@ -230,9 +230,9 @@ define(function (require) {
                 var nickName = $("#nickname").val();
                 var url = '';
                 if (id == '') {
-                    url = 'permission/sys/user/add';
+                    url = 'user/add';
                 } else {
-                    url = 'permission/sys/user/update';
+                    url = 'user/update';
                 }
                 SYS.Core.ajaxPost({
                     url: url,
@@ -263,7 +263,7 @@ define(function (require) {
                     roleIds.push($(this).val());
                 });
                 SYS.Core.ajaxPost({
-                    url: "permission/sys/user/updateRole",
+                    url: "user/updateRole",
                     data: {
                         userId: userId,
                         roleIds: roleIds
@@ -304,7 +304,7 @@ define(function (require) {
                 var uid = $.cookie("u_id");
                 var u_tokenId = $.cookie("u_tokenId");
                 $.ajax({
-                    url: 'permission/sys/user/list',
+                    url: 'user/list',
                     type: "get",
                     dataType: 'json',
                     async: false, //同步
@@ -334,7 +334,7 @@ define(function (require) {
                 $("#menu_user_name").html(username);
                 var userId = $.cookie('u_id');
                 SYS.Core.ajaxGet({
-                    url: "permission/sys/user/listMyMenu",
+                    url: "user/listMyMenu",
                     data: {
                         userId: id
                     },

@@ -132,7 +132,7 @@ define(function (require) {
                 //根据id获取菜单信息
                 id = Number(id);
                 SYS.Core.ajaxGet({
-                    url: "permission/menu/detail",
+                    url: "permission/detail",
                     data: {
                         id: id
                     },
@@ -141,16 +141,16 @@ define(function (require) {
                             //填充表单
                             var menu = data.data;
                             $("#fm input[name='id']").val(menu.id);
-                            if (menu.itype == 1) {
+                            if (menu.type == 'menu') {
                                 $("#fm input[name='itype']").eq(0)[0].checked = true;
                             }
-                            if (menu.itype == 2) {
+                            if (menu.type == 'button') {
                                 $("#fm input[name='itype']").eq(1)[0].checked = true;;
                             }
                             $("#fm input[name='parent_id']").val(menu.parentId);
-                            $("#fm input[name='menu_name']").val(menu.menuName);
-                            $("#fm input[name='menu_path']").val(menu.menuPath);
-                            $("#fm input[name='menu_sort']").val(menu.menuSort);
+                            $("#fm input[name='menu_name']").val(menu.name);
+                            $("#fm input[name='menu_path']").val(menu.permission);
+                            $("#fm input[name='menu_sort']").val(menu.sort);
                             $("#fm input[name='icon_cls']").val(menu.iconCls);
                             $("#fm input[name='scode']").val(menu.scode);
                             $("#desc").val(menu.memo);
@@ -171,9 +171,9 @@ define(function (require) {
                 var id = $("#fm input[name='id']").val();
                 console.log(id);
                 if (id == '') {
-                    url = 'permission/menu/add';
+                    url = 'permission/add';
                 } else {
-                    url = 'permission/menu/update';
+                    url = 'permission/update';
                 }
                 var parentId = $("#fm input[name='parent_id']").val();
                 var itype = $("#fm input[name='itype']:checked").val();
@@ -195,11 +195,11 @@ define(function (require) {
                     data: {
                         id: id ? id : 0,
                         parentId: parentId ? parentId : 0,
-                        menuName: menuName || '',
-                        menuPath: menuPath || '',
-                        menuSort: menuSort || '',
+                        name: menuName || '',
+                        permission: menuPath || '',
+                        sort: menuSort || '',
                         iconCls: iconCls || '',
-                        itype: itype || '',
+                        type: itype || '',
                         scode: scode || '',
                         memo: memo
                     },
@@ -224,7 +224,7 @@ define(function (require) {
                 var that = this;
                 $.messager.confirm('确定要删除选择的菜单吗？如果存在子菜单，将一并删除？', function () {
                     SYS.Core.ajaxPost({
-                        url: "permission/menu/delete",
+                        url: "permission/delete",
                         common: {},
                         data: {
                             id: id

@@ -30,9 +30,9 @@ $(document).ready(function () {
     //     var data = JSON.parse(localStorage.getItem("DO")).data;
     //     console.log(data);
     //     for (var i = 0; i < data.length; i++) {
-    //         if (data[i].menuName == parent) {
+    //         if (data[i].name == parent) {
     //             for (var j = 0; j < data[i].children.length; j++) {
-    //                 if (data[i].children[j].menuName == child) {
+    //                 if (data[i].children[j].name == child) {
     //                     for (var k = 0; k < data[i].children[j].children.length; k++) {
     //                         array.push(data[i].children[j].children[k].scode);
     //                     }
@@ -158,7 +158,7 @@ function loadMenu() {
     var uid = $.cookie("u_id");
     var u_tokenId = $.cookie("u_tokenId");
     $.ajax({
-        url: baseUrl + 'sys/user/listMyMenu',
+        url: baseUrl + 'permission/listMyMenu',
         type: "get",
         dataType: 'json',
         async: false,    //同步
@@ -188,29 +188,29 @@ function loadMenu() {
                     //支持三级菜单
                     var menu = menus[i];
                     
-                    if (menu.menuPath && menu.menuPath.length > 0 && (!menu.children || menu.children.length == 0)) {
-                        menu_html += "<li><a class=\"J_menuItem\" href=\"" + menu.menuPath + "#" + menu.id + "\" data-menu-id=\"" + menu.id + "\" ><i class=\"fa fa-" + menu.iconCls + "\"></i> <span class=\"nav-label\">" + menu.menuName + "</span></a></li>";
+                    if (menu.permission && menu.permission.length > 0 && (!menu.children || menu.children.length == 0)) {
+                        menu_html += "<li><a class=\"J_menuItem\" href=\"" + menu.permission + "#" + menu.id + "\" data-menu-id=\"" + menu.id + "\" ><i class=\"fa fa-" + menu.iconCls + "\"></i> <span class=\"nav-label\">" + menu.name + "</span></a></li>";
                     } else {
                         menu_html += "" +
                             "<li>" +
-                            "     <a href=\"#\"><i class=\"fa fa-" + menu.iconCls + "\"></i> <span class=\"nav-label\">" + menu.menuName + "</span><span class=\"fa arrow\"></span></a>" +
+                            "     <a href=\"#\"><i class=\"fa fa-" + menu.iconCls + "\"></i> <span class=\"nav-label\">" + menu.name + "</span><span class=\"fa arrow\"></span></a>" +
                             "     <ul class=\"nav nav-second-level\">";
                         for (var n = 0; n < menu.children.length; n++) {
                             // console.log(menu.children);
                             var children = menu.children[n];
-                            if (children.menuPath && children.menuPath.length > 0 && (!children.children || children.children.length == 0)) {
-                                menu_html += "<li aaa=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.menuPath + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.menuName + "</a></li>";
+                            if (children.permission && children.permission.length > 0 && (!children.children || children.children.length == 0)) {
+                                menu_html += "<li aaa=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.permission + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.name + "</a></li>";
                             } else {
-                                menu_html += "<li aaa=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.menuPath + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.menuName + "</a>" +
+                                menu_html += "<li aaa=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.permission + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.name + "</a>" +
                                     "<ul class=\"nav nav-third-level\">";
                                 menu_html += "" +
                                     "    </ul>" +
                                     " </li>";
                             }
-                            // if (children.menuPath && children.menuPath.length > 0 && (!children.children || children.children.length == 0)) {
-                            //     menu_html += "<li title=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.menuPath + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.menuName + "</a></li>";
+                            // if (children.permission && children.permission.length > 0 && (!children.children || children.children.length == 0)) {
+                            //     menu_html += "<li title=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.permission + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.name + "</a></li>";
                             // } else {
-                            //     menu_html += "<li title=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.menuPath + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.menuName + "</a>" +
+                            //     menu_html += "<li title=\"" + children.memo + "\"><a class=\"J_menuItem\" href=\"" + children.permission + "#" + children.id + "\" data-menu-id=\"" + children.id + "\">" + children.name + "</a>" +
                             //         "<ul class=\"nav nav-third-level\">";
                             //     menu_html += "" +
                             //         "    </ul>" +

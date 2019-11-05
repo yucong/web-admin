@@ -168,7 +168,7 @@ $.module('SYS.Core', function () {
                 dataType: 'json',
                 data: param.data,
                 beforeSend: function (request) {
-                    request.setRequestHeader("X-Auth-Token", u_tokenId);
+                    request.setRequestHeader("Authorization", u_tokenId);
                     request.setRequestHeader("X-User-Id", uid);
                     request.setRequestHeader("Device-Type", "web");
                     request.setRequestHeader("App-Version", "1.0.0");//App-Version abc

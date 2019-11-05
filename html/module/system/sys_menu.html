@@ -79,9 +79,9 @@
                         <tbody>
                         {{~it:value:index}}
                         <tr class="treegrid-{{= value.id}}">
-                            <td><i class="fa fa-{{= value.icon_cls}}"> {{= value.menuName}}</i></td>
-                            <td>{{= value.menuPath}}</td>
-                            <td>{{= value.menuSort}}</td>
+                            <td><i class="fa fa-{{= value.icon_cls}}"> {{= value.name}}</i></td>
+                            <td>{{= value.permission}}</td>
+                            <td>{{= value.sort}}</td>
                             <td>
                                 {{if(value.id > 0){}}
                                 <a href="javascript:void(0)" onclick="SYS.sys_menu.editDialog('{{= value.id}}')"
@@ -95,9 +95,9 @@
                         </tr>
                         {{~value.children:val:num}}
                         <tr class="treegrid-{{= val.parentId}}-{{= val.id}} treegrid-parent-{{= val.parentId}}">
-                            <td><i class="fa fa-genderless"> {{= val.menuName}}</i></td>
-                            <td>{{= val.menuPath}}</td>
-                            <td>{{= val.menuSort}}</td>
+                            <td><i class="fa fa-genderless"> {{= val.name}}</i></td>
+                            <td>{{= val.permission}}</td>
+                            <td>{{= val.sort}}</td>
                             <td>
                                 {{if(value.id > 0){}}
                                 <a href="javascript:void(0)" onclick="SYS.sys_menu.editDialog('{{= val.id}}')"
@@ -111,9 +111,9 @@
                         </tr>
                         {{~val.children:v:n}}
                         <tr class="treegrid-parent-{{= val.parentId}}-{{= v.parentId}}">
-                            <td> &nbsp; {{= v.menuName}}</i></td>
-                            <td>{{= v.menuPath}}</td>
-                            <td>{{= v.menuSort}}</td>
+                            <td> &nbsp; {{= v.name}}</i></td>
+                            <td>{{= v.permission}}</td>
+                            <td>{{= v.sort}}</td>
                             <td>
                                 {{if(v.id > 0){}}
                                 <a href="javascript:void(0)" onclick="SYS.sys_menu.editDialog('{{= v.id}}')"

@@ -24,7 +24,7 @@ define(function (require) {
             },
             loadData: function () {
                 SYS.Core.ajaxGet({
-                    url: 'permission/menu/listAll',
+                    url: 'permission/listAll',
                     data: {},
                     success: function (data) {
                         var template = doT.template($("#tmpl_sys_menu_list").html());

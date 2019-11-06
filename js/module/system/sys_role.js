@@ -15,7 +15,7 @@ define(function (require) {
                 var that = this;
                 var search_role_name = $("#search_role_name").val();
                 SYS.Core.ajaxGet({
-                    url: "permission/role/list",
+                    url: "role/list",
                     data: {
                         role_name: search_role_name
                     },
@@ -44,12 +44,12 @@ define(function (require) {
                             columns: [
                                 //{field: 'checked', checkbox: true} ,
                                 {
-                                    field: 'roleName',
+                                    field: 'role',
                                     title: '角色名称',
                                     align: 'center'
                                 },
                                 {
-                                    field: 'roleDesc',
+                                    field: 'description',
                                     title: '角色描述',
                                     align: 'center'
                                 },
@@ -68,7 +68,7 @@ define(function (require) {
                                     formatter: function (value, row, index) {
                                         var html = '';
                                         if (row.id > 0) {
-                                            html = '<a href="javascript:void(0)" onclick="SYS.sys_role.toEdit(' + row.id + ',\'' + row.roleName + '\',\'' + row.roleDesc + '\')" class="text-do-edit"><i class="fa fa-pencil"></i> 编辑</a>';
+                                            html = '<a href="javascript:void(0)" onclick="SYS.sys_role.toEdit(' + row.id + ',\'' + row.role + '\',\'' + row.description + '\')" class="text-do-edit"><i class="fa fa-pencil"></i> 编辑</a>';
                                             html += '<span class="text-explode"> | </span>';
                                             html += '<a href="javascript:void(0)" onclick="SYS.sys_role.toRemove(' + row.id + ')" class="text-do-remove"><i class="fa fa-trash"></i> 删除</a>';
                                         }
@@ -140,7 +140,7 @@ define(function (require) {
                 var that = this;
                 $.messager.confirm("确定要删除吗？", function () {
                     SYS.Core.ajaxPost({
-                        url: "permission/role/delete",
+                        url: "role/delete",
                         data: {
                             id: id
                         },
@@ -158,7 +158,7 @@ define(function (require) {
             editRole: function (id) {
                 //加载可选择的菜单
                 SYS.Core.ajaxGet({
-                    url: 'permission/menu/listRoleMenu',
+                    url: 'permission/listPermissionByRoleId',
                     data: {
                         roleId: id
                     },
@@ -199,7 +199,7 @@ define(function (require) {
                                 var zNode = {};
                                 zNode.id = menu.id;
                                 zNode.pId = menu.parentId;
-                                zNode.name = menu.menuName;
+                                zNode.name = menu.name;
                                 zNode.open = true;
                                 zNode.checked = menu.checked;
                                 zNodes.push(zNode);
@@ -210,7 +210,7 @@ define(function (require) {
                                         var zNode = {};
                                         zNode.id = childrenMenu.id;
                                         zNode.pId = menu.id;
-                                        zNode.name = childrenMenu.menuName;
+                                        zNode.name = childrenMenu.name;
                                         zNode.open = true;
                                         zNode.checked = childrenMenu.checked;
                                         zNodes.push(zNode);
@@ -221,7 +221,7 @@ define(function (require) {
                                                 var z = {};
                                                 z.id = c.id;
                                                 z.pId = childrenMenu.id;
-                                                z.name = c.menuName;
+                                                z.name = c.name;
                                                 z.open = true;
                                                 z.checked = c.checked;
                                                 zNodes.push(z);
@@ -250,9 +250,9 @@ define(function (require) {
                 }
                 var url = '';
                 if (id == '') {
-                    url = 'permission/role/addRoleAndMenu';
+                    url = 'role/addRolePermission';
                 } else {
-                    url = 'permission/role/updateRoleAndMenu';
+                    url = 'role/updateRolePermission';
                 }
                 SYS.Core.ajaxPost({
                     url: url,

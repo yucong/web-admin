@@ -78,7 +78,7 @@ define(function (require) {
                                         html += '<span class="text-explode"> | </span>';
                                         html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.phone + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
                                         html += '<span class="text-explode"> | </span>';
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.phone + '\')" class="text-do-view"> 拥有权限</a>';
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.username + '\')" class="text-do-view"> 拥有权限</a>';
                                         html += '<span class="text-explode"> | </span>';
                                         html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 删除</a>';
                                     }
@@ -240,7 +240,7 @@ define(function (require) {
                     data: {
                         id: id ? id : 0,
                         password: password,
-                        phone: username,
+                        username: username,
                         nickName: nickName,
                     },
                     success: function (data) {
@@ -334,12 +334,12 @@ define(function (require) {
                 $("#menu_user_name").html(username);
                 var userId = $.cookie('u_id');
                 SYS.Core.ajaxGet({
-                    url: "user/listMyMenu",
+                    url: "permission/listMyMenu",
                     data: {
                         userId: id
                     },
                     success: function (data) {
-                        debugger;
+                        // debugger;
                         if (data.code == 1) {
                             if (data.data.length == 0) {
                                 $.messager.popup('用户没有可操作菜单', 'info');
@@ -381,7 +381,7 @@ define(function (require) {
                                     var zNode = {};
                                     zNode.id = menu.id;
                                     zNode.pId = menu.parentId;
-                                    zNode.name = menu.menuName;
+                                    zNode.name = menu.name;
                                     zNode.open = true;
                                     zNodes.push(zNode);
                                     if (menu.children && menu.children.length > 0) {
@@ -390,7 +390,7 @@ define(function (require) {
                                             var zNode = {};
                                             zNode.id = childrenMenu.id;
                                             zNode.pId = menu.id;
-                                            zNode.name = childrenMenu.menuName;
+                                            zNode.name = childrenMenu.name;
                                             zNode.open = true;
                                             zNodes.push(zNode);
                                             //三级菜单
@@ -400,7 +400,7 @@ define(function (require) {
                                                     var z = {};
                                                     z.id = c.id;
                                                     z.pId = childrenMenu.id;
-                                                    z.name = c.menuName;
+                                                    z.name = c.name;
                                                     z.open = true;
                                                     z.checked = c.checked;
                                                     zNodes.push(z);

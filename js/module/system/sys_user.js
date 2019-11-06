@@ -76,7 +76,7 @@ define(function (require) {
                                     if (row.id > 0) {
                                         html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
                                         html += '<span class="text-explode"> | </span>';
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.phone + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.username + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
                                         html += '<span class="text-explode"> | </span>';
                                         html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.username + '\')" class="text-do-view"> 拥有权限</a>';
                                         html += '<span class="text-explode"> | </span>';
@@ -184,13 +184,14 @@ define(function (require) {
                 $("#user_name").val(username);
                 console.log(username)
                 SYS.Core.ajaxGet({
-                    url: "permission/role/listAll",
+                    url: "role/list",
                     data: {},
                     success: function (data) {
                         if (data.code == 1) {
                             var html = '';
                             //默认勾选功能,根据用户id获取角色ids
                             var roleIds = that.getSelRols();
+                            console.log("用户拥有的角色:" + roleIds);
                             html += '' +
                                 '<thead> ' +
                                 '<tr> ' +
@@ -200,7 +201,7 @@ define(function (require) {
                                 '</tr>' +
                                 '</thead>' +
                                 '<tbody> ';
-                            var rows = data.data;
+                            var rows = data.data.list;
                             for (var i = 0; i < rows.length; i++) {
                                 html += '<tr>' +
                                     '<td><input type="checkbox" name="roleCheck" value="' + rows[i].id + '" ';
@@ -208,8 +209,8 @@ define(function (require) {
                                     html += 'checked="checked"';
                                 }
                                 html += '></td>' +
-                                    '<td>' + rows[i].roleName + '</td>' +
-                                    '<td>' + rows[i].roleDesc + '</td>' +
+                                    '<td>' + rows[i].role + '</td>' +
+                                    '<td>' + rows[i].description + '</td>' +
                                     '</tr>';
                             }
                             html += '</tbody>';
@@ -281,13 +282,40 @@ define(function (require) {
             },
             getSelRols: function () {
                 var arr = new Array();
-                // SYS.Core.ajaxGet({
-                //     url: '/sys/user/list',
+                SYS.Core.ajaxGetAsync({
+                    url: 'role/listMyRole',
+                    data: {
+
+                    },
+                    success: function (data) {
+                        var id = +$("#user_id").val();
+                        if (data.code == 1) {
+                            var list = data.data;
+                            for (var i = 0; i < list.length; i++) {
+                                if (list[i].id == id) {
+                                    arr[i] = list[i].id;
+                                }
+
+                            }
+                        }
+                    }
+                })
+                
+
+
+                // var uid = $.cookie("u_id");
+                // var u_tokenId = $.cookie("u_tokenId");
+                // $.ajax({
+                //     url: 'user/list',
                 //     type: "get",
                 //     dataType: 'json',
                 //     async: false, //同步
                 //     data: JSON.stringify(
                 //     ),
+                //     beforeSend: function (request) {
+                //         request.setRequestHeader("x-auth-token", u_tokenId);
+                //         request.setRequestHeader("x-user-id", uid);
+                //     },
                 //     success: function (data) {
                 //         var id = +$("#user_id").val();
                 //         if (data.code == 1) {
@@ -300,33 +328,7 @@ define(function (require) {
                 //             }
                 //         }
                 //     }
-                // })
-                var uid = $.cookie("u_id");
-                var u_tokenId = $.cookie("u_tokenId");
-                $.ajax({
-                    url: 'user/list',
-                    type: "get",
-                    dataType: 'json',
-                    async: false, //同步
-                    data: JSON.stringify(
-                    ),
-                    beforeSend: function (request) {
-                        request.setRequestHeader("x-auth-token", u_tokenId);
-                        request.setRequestHeader("x-user-id", uid);
-                    },
-                    success: function (data) {
-                        var id = +$("#user_id").val();
-                        if (data.code == 1) {
-                            var list = data.data.list;
-                            for (var i = 0; i < list.length; i++) {
-                                if (list[i].id == id) {
-                                    arr = list[i].roleIds;
-                                }
-
-                            }
-                        }
-                    }
-                });
+                // });
                 return arr;
             },
             toSelfMenu: function (id, username) {

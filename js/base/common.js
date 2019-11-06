@@ -156,7 +156,7 @@ $.module('SYS.Core', function () {
             });
         },
         /** get方式：表单提交 */
-        ajaxGet: function (param) {
+        ajaxGetAsync: function (param) {
             var that = this;
             var common = param.common;
             var uid = $.cookie("u_id");
@@ -165,6 +165,7 @@ $.module('SYS.Core', function () {
             $.ajax({
                 url: requestUrl,
                 type: "get",
+                async: false, //同步
                 dataType: 'json',
                 data: param.data,
                 beforeSend: function (request) {
@@ -246,24 +247,24 @@ $.module('SYS.Core', function () {
                 }
             });
         },
-        ajaxGetAsync: function (param) {
-            var uid = $.cookie("u_id");
-            var u_tokenId = $.cookie("u_tokenId");
-            $.ajax({
-                url: baseUrl + param.url,
-                type: "get",
-                dataType: 'json',
-                async: false, //同步
-                data: param.data,
-                beforeSend: function (request) {
-                    request.setRequestHeader("x-auth-token", u_tokenId);
-                    request.setRequestHeader("x-user-id", uid);
-                },
-                success: function (data) {
-                    param.success(data);
-                }
-            });
-        },
+        // ajaxGetAsync: function (param) {
+        //     var uid = $.cookie("u_id");
+        //     var u_tokenId = $.cookie("u_tokenId");
+        //     $.ajax({
+        //         url: baseUrl + param.url,
+        //         type: "get",
+        //         dataType: 'json',
+        //         async: false, //同步
+        //         data: param.data,
+        //         beforeSend: function (request) {
+        //             request.setRequestHeader("x-auth-token", u_tokenId);
+        //             request.setRequestHeader("x-user-id", uid);
+        //         },
+        //         success: function (data) {
+        //             param.success(data);
+        //         }
+        //     });
+        // },
         checkLogin: function () {
             /* var is_login = $.cookie("is_login");  //判断是否登录
              if (is_login != "true") {

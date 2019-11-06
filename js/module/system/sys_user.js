@@ -190,7 +190,7 @@ define(function (require) {
                         if (data.code == 1) {
                             var html = '';
                             //默认勾选功能,根据用户id获取角色ids
-                            var roleIds = that.getSelRols();
+                            var roleIds = that.getSelRols(id);
                             console.log("用户拥有的角色:" + roleIds);
                             html += '' +
                                 '<thead> ' +
@@ -280,55 +280,22 @@ define(function (require) {
                     }
                 })
             },
-            getSelRols: function () {
+            getSelRols: function (id) {
                 var arr = new Array();
                 SYS.Core.ajaxGetAsync({
-                    url: 'role/listMyRole',
+                    url: 'role/listByUserId',
                     data: {
-
+                        userId : id
                     },
                     success: function (data) {
-                        var id = +$("#user_id").val();
                         if (data.code == 1) {
                             var list = data.data;
                             for (var i = 0; i < list.length; i++) {
-                                if (list[i].id == id) {
-                                    arr[i] = list[i].id;
-                                }
-
+                                arr[i] = list[i].id;
                             }
                         }
                     }
-                })
-                
-
-
-                // var uid = $.cookie("u_id");
-                // var u_tokenId = $.cookie("u_tokenId");
-                // $.ajax({
-                //     url: 'user/list',
-                //     type: "get",
-                //     dataType: 'json',
-                //     async: false, //同步
-                //     data: JSON.stringify(
-                //     ),
-                //     beforeSend: function (request) {
-                //         request.setRequestHeader("x-auth-token", u_tokenId);
-                //         request.setRequestHeader("x-user-id", uid);
-                //     },
-                //     success: function (data) {
-                //         var id = +$("#user_id").val();
-                //         if (data.code == 1) {
-                //             var list = data.data.list;
-                //             for (var i = 0; i < list.length; i++) {
-                //                 if (list[i].id == id) {
-                //                     arr = list[i].roleIds;
-                //                 }
-
-                //             }
-                //         }
-                //     }
-                // });
+                });
                 return arr;
             },
             toSelfMenu: function (id, username) {

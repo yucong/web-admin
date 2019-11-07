@@ -158,7 +158,7 @@ function loadMenu() {
     var uid = $.cookie("u_id");
     var u_tokenId = $.cookie("u_tokenId");
     $.ajax({
-        url: baseUrl + 'permission/listMyMenu',
+        url: baseUrl + 'listMenu',
         type: "get",
         dataType: 'json',
         async: false,    //同步

@@ -303,7 +303,7 @@ define(function (require) {
                 $("#menu_user_name").html(username);
                 var userId = $.cookie('u_id');
                 SYS.Core.ajaxGet({
-                    url: "permission/listMyMenu",
+                    url: "permission/listByUserId",
                     data: {
                         userId: id
                     },

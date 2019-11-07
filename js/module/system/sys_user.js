@@ -73,18 +73,21 @@ define(function (require) {
                                 align: 'center',
                                 formatter: function (value, row, index) {
                                     var html = '';
-                                    if (row.id > 0) {
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
-                                        html += '<span class="text-explode"> | </span>';
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.username + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
-                                        html += '<span class="text-explode"> | </span>';
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.username + '\')" class="text-do-view"> 拥有权限</a>';
-                                        html += '<span class="text-explode"> | </span>';
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 删除</a>';
+                                    
+                                    html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
+                                    html += '<span class="text-explode"> | </span>';
+                                    html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.username + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
+                                    html += '<span class="text-explode"> | </span>';
+                                    html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.username + '\')" class="text-do-view"> 拥有权限</a>';
+                                    html += '<span class="text-explode"> | </span>';
+
+                                    if(row.locked == 0) {
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ',' + row.locked + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 冻结</a>';
+                                    } else {
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ',' + row.locked + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 解除</a>';
                                     }
-                                    if (row.id == -1) {
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
-                                    }
+                                    
+                                    
                                     return html;
                                 }
                             }
@@ -158,20 +161,26 @@ define(function (require) {
                 $("#fm #nickname").val(obj.nickName);
                 $('#myModal').modal('show');
             },
-            toRemove: function (id) {
+            toRemove: function (id,locked) {
                 var that = this;
-                $.messager.confirm("确定要删除吗？", function () {
+                var msg = "";
+                if(locked == 1) {
+                    msg = "确定要解除吗?";
+                } else {
+                    msg = "确定要冻结吗?";
+                }
+                $.messager.confirm(msg, function () {
                     SYS.Core.ajaxPost({
-                        url: "user/delete",
+                        url: "user/locked",
                         data: {
-                            id: +id
+                            userId: +id
                         },
                         success: function (data) {
                             if (data.code == 1) {
-                                $.messager.popup('删除成功', "success");
+                                $.messager.popup('操作成功', "success");
                                 that.loadData();
                             } else {
-                                $.messager.popup('删除失败', 'error');
+                                $.messager.popup('操作失败', 'error');
                             }
                         }
                     })

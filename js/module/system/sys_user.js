@@ -73,21 +73,22 @@ define(function (require) {
                                 align: 'center',
                                 formatter: function (value, row, index) {
                                     var html = '';
-                                    
-                                    html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
-                                    html += '<span class="text-explode"> | </span>';
-                                    html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.username + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
-                                    html += '<span class="text-explode"> | </span>';
-                                    html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.username + '\')" class="text-do-view"> 拥有权限</a>';
-                                    html += '<span class="text-explode"> | </span>';
-
-                                    if(row.locked == 0) {
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ',' + row.locked + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 冻结</a>';
-                                    } else {
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ',' + row.locked + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 解除</a>';
-                                    }
-                                    
-                                    
+                                    // if(row.username == 'admin') {
+                                    //     html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
+                                    // } else {
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
+                                        html += '<span class="text-explode"> | </span>';
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.username + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
+                                        html += '<span class="text-explode"> | </span>';
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.username + '\')" class="text-do-view"> 拥有权限</a>';
+                                        html += '<span class="text-explode"> | </span>';
+    
+                                        if(row.locked == 0) {
+                                            html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ',' + row.locked + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 冻结</a>';
+                                        } else {
+                                            html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toRemove(' + row.id + ',' + row.locked + ')" class="text-do-remove"><i class="fa fa-trash-o"></i> 解除</a>';
+                                        }
+                                    // }
                                     return html;
                                 }
                             }

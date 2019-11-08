@@ -17,7 +17,7 @@ define(function (require) {
                 SYS.Core.ajaxGet({
                     url: "role/list",
                     data: {
-                        role_name: search_role_name
+                        roleName: search_role_name
                     },
                     success: function (data) {
                         var obj = {

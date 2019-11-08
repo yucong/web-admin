@@ -195,7 +195,9 @@ define(function (require) {
                 console.log(username)
                 SYS.Core.ajaxGet({
                     url: "role/list",
-                    data: {},
+                    data: {
+                        available : true
+                    },
                     success: function (data) {
                         if (data.code == 1) {
                             var html = '';

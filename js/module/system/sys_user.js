@@ -19,6 +19,7 @@ define(function (require) {
                 SYS.Core.ajaxGet({
                     url: "user/list",
                     data: {
+                        username: search_username,
                         page: pageNumber ? pageNumber : 1,
                         size: pageSize ? pageSize : 20
                     },

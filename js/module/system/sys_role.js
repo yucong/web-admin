@@ -53,28 +53,27 @@ define(function (require) {
                                     title: '角色描述',
                                     align: 'center'
                                 },
-                                {
-                                    field: 'createTime',
-                                    title: '创建时间',
-                                    align: 'center',
-                                    formatter: function (time) {
-                                        return SYS.Tool.formatterTime(time);
-                                    }
-                                },
+                                // {
+                                //     field: 'createTime',
+                                //     title: '创建时间',
+                                //     align: 'center',
+                                //     formatter: function (time) {
+                                //         return SYS.Tool.formatterTime(time);
+                                //     }
+                                // },
                                 {
                                     field: 'do',
                                     title: '操作',
                                     align: 'center',
                                     formatter: function (value, row, index) {
                                         var html = '';
-                                        if (row.id > 0) {
-                                            html = '<a href="javascript:void(0)" onclick="SYS.sys_role.toEdit(' + row.id + ',\'' + row.role + '\',\'' + row.description + '\')" class="text-do-edit"><i class="fa fa-pencil"></i> 编辑</a>';
-                                            html += '<span class="text-explode"> | </span>';
-                                            html += '<a href="javascript:void(0)" onclick="SYS.sys_role.toRemove(' + row.id + ')" class="text-do-remove"><i class="fa fa-trash"></i> 删除</a>';
-                                        }
-                                        else if(row.id==-1){
-                                            html = '<a href="javascript:void(0)" onclick="SYS.sys_role.toEdit(' + row.id + ',\'' + row.roleName + '\',\'' + row.roleDesc + '\')" class="text-do-edit"><i class="fa fa-pencil"></i> 编辑</a>';
-                                        }
+                                        html = '<a href="javascript:void(0)" onclick="SYS.sys_role.toEdit(' + row.id + ',\'' + row.role + '\',\'' + row.description + '\')" class="text-do-edit"><i class="fa fa-pencil"></i> 编辑</a>';
+                                        html += '<span class="text-explode"> | </span>';
+                                        if(row.available) {
+                                            html += '<a href="javascript:void(0)" onclick="SYS.sys_role.toRemove(' + row.id + ',' + row.available + ')" class="text-do-remove"><i class="fa fa-trash"></i> 冻结</a>';
+                                        } else {
+                                            html += '<a href="javascript:void(0)" onclick="SYS.sys_role.toRemove(' + row.id + ',' + row.available + ')" class="text-do-remove"><i class="fa fa-trash"></i> 解除</a>';
+                                        } 
                                         return html;
                                     }
                                 }
@@ -136,13 +135,19 @@ define(function (require) {
                 that.editRole(id);
                 $('#myModal').modal('show');
             },
-            toRemove: function (id) {
+            toRemove: function (id,available) {
                 var that = this;
-                $.messager.confirm("确定要删除吗？", function () {
+                var msg = "";
+                if(available) {
+                    msg = "确定要冻结吗?";
+                } else {
+                    msg = "确定要解除吗";
+                }
+                $.messager.confirm( msg, function () {
                     SYS.Core.ajaxPost({
-                        url: "role/delete",
+                        url: "role/locked",
                         data: {
-                            id: id
+                            roleId: id
                         },
                         success: function (data) {
                             if (data.code == 1) {

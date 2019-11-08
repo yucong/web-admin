@@ -169,7 +169,7 @@ define(function (require) {
                 var that = this;
                 var url = '';
                 var id = $("#fm input[name='id']").val();
-                console.log(id);
+
                 if (id == '') {
                     url = 'permission/add';
                 } else {
@@ -177,7 +177,7 @@ define(function (require) {
                 }
                 var parentId = $("#fm input[name='parent_id']").val();
                 var itype = $("#fm input[name='itype']:checked").val();
-                console.log(itype)
+
                 var menuName = $("#fm input[name='menu_name']").val();
                 var menuPath = $("#fm input[name='menu_path']").val();
                 var menuSort = $("#fm input[name='menu_sort']").val();
@@ -185,11 +185,7 @@ define(function (require) {
                 // var btnName = $("#fm input[name='btn_name']").val();
                 var scode = $("#fm input[name='scode']").val();
                 var memo = $("#desc").val();
-                console.log(parentId);
-                console.log(menuName);
-                console.log(menuPath);
-                console.log(menuSort);
-                console.log(iconCls);
+               
                 SYS.Core.ajaxPost({
                     url: url,
                     data: {
@@ -220,11 +216,18 @@ define(function (require) {
                 $("#fm input[name='parent_id']").val(id); //绑定父菜单ID
                 $('#myModal').modal('show');
             },
-            deleteMenu: function (id) {
+            deleteMenu: function (id,available) {
                 var that = this;
-                $.messager.confirm('确定要删除选择的菜单吗？如果存在子菜单，将一并删除？', function () {
+                // var msg = 确定要删除选择的菜单吗？如果存在子菜单，将一并删除？
+                var msg = "";
+                if(available) {
+                    msg = "确定要冻结吗?";
+                } else {
+                    msg = "确定要解除吗?";
+                }
+                $.messager.confirm(msg , function () {
                     SYS.Core.ajaxPost({
-                        url: "permission/delete",
+                        url: "permission/locked",
                         common: {},
                         data: {
                             id: id
@@ -234,7 +237,8 @@ define(function (require) {
                                 $.messager.popup(data.message, 'success');
                                 that.loadData();
                             } else {
-                                $.messager.popup('删除失败，请稍后再试', 'error');
+                                // $.messager.popup('删除失败，请稍后再试', 'error');
+                                $.messager.popup(data.message, 'error');
                             }
                         }
                     })

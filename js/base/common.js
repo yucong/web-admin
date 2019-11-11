@@ -188,7 +188,7 @@ $.module('SYS.Core', function () {
                         $.cookie('u_id', '', { path: "/", expires: 7 });
                         $.cookie('u_name', '', { path: "/", expires: 7 });
                         $.cookie('m_id', '', { path: "/", expires: 7 });
-                        console.log("没有权限访问，返回登录界面，msg:" + data.msg);
+                        console.log("登录授权过期，返回登录界面，msg:" + data.msg);
                         location.href = "/html/login.html";
                     } else {
                         param.success(data);

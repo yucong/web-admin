@@ -30,7 +30,7 @@ define(function (require) {
                         var template = doT.template($("#tmpl_sys_menu_list").html());
                         $("#sys_menu_list").html(template(data.data));
                         $('#menu_tree').treegrid();
-                        $('#menu_tree').treegrid('collapseAll');
+                        // $('#menu_tree').treegrid('collapseAll');
                         // console.log($("fm input:radio").val())
                     }
                 })

@@ -197,7 +197,7 @@ define(function (require) {
                 SYS.Core.ajaxGet({
                     url: "role/list",
                     data: {
-                        available : true
+                        
                     },
                     success: function (data) {
                         if (data.code == 1) {
@@ -217,9 +217,12 @@ define(function (require) {
                             var rows = data.data.list;
                             for (var i = 0; i < rows.length; i++) {
                                 html += '<tr>' +
-                                    '<td><input type="checkbox" name="roleCheck" value="' + rows[i].id + '" ';
+                                    '<td><input type="checkbox"  name="roleCheck" value="' + rows[i].id + '" ';
                                 if ($.inArray(rows[i].id, roleIds) != -1) {
-                                    html += 'checked="checked"';
+                                    html += 'checked="checked" ';
+                                }
+                                if(!rows[i].available) {
+                                    html += 'disabled="disabled"';
                                 }
                                 html += '></td>' +
                                     '<td>' + rows[i].role + '</td>' +

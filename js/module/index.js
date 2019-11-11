@@ -274,6 +274,29 @@ function logout() {
         $.cookie('m_id', '', { path: "/", expires: 7 });
         location.href = "login.html";
     });
+
+
+    $.ajax({
+        url: baseUrl + 'logout',
+        type: "post",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: {
+           
+        },
+        success: function (data) {
+            if (data.code == 1) {
+                console.log("退出登录成功");
+            } else {
+                console.log("退出登录失败");
+            }
+
+        },
+        error: function () {
+            $(".my_message").html("登出出错！");
+        }
+    });
+
 }
 
 /**

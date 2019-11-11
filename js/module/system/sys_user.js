@@ -7,6 +7,7 @@ define(function (require) {
 
     $.module("SYS.sys_user", function () {
         var current_show_data = [];
+
         return {
             init: function () {
                 this.loadData();
@@ -55,6 +56,28 @@ define(function (require) {
                                 title: '用户名',
                                 align: 'center'
                             },
+                            {
+                                field: 'username',
+                                title: '所属角色',
+                                align: 'center',
+                                formatter: function (value, row, index) {
+                                    var html = "";
+                                    var roles = row.roles;
+                                    var length = roles.length;
+                                    if(length > 0) {
+                                        for(var i=0;i<roles.length;i++) {
+                                            if(i == length - 1) {
+                                                html += roles[i].role;
+                                            } else {
+                                                html += roles[i].role + "，";
+                                            }
+                                        }
+                                    } else {
+                                        html = "-";
+                                    }
+                                    return html;
+                                }
+                            },
                             // {
                             //     field: 'username',
                             //     title: '昵称',
@@ -79,7 +102,7 @@ define(function (require) {
                                     // } else {
                                         html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEdit(' + index + ')" class="text-do-edit"><i class="fa fa-pencil-square-o"></i> 编辑</a>';
                                         html += '<span class="text-explode"> | </span>';
-                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + row.id + ',\'' + row.username + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
+                                        html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toEditUserRole(' + index + ',' + row.id + ',\'' + row.username + '\')" class="text-do-edit"><i class="fa fa-user"></i> 分配角色</a>';
                                         html += '<span class="text-explode"> | </span>';
                                         html += '<a href="javascript:void(0)" onclick="SYS.sys_user.toSelfMenu(' + row.id + ',\'' + row.username + '\')" class="text-do-view"> 拥有权限</a>';
                                         html += '<span class="text-explode"> | </span>';
@@ -188,12 +211,17 @@ define(function (require) {
                     })
                 });
             },
-            toEditUserRole: function (id, username) {
+            toEditUserRole: function (index, id, username) {
                 var that = this;
                 var array = [];
                 $("#user_id").val(id);
                 $("#user_name").val(username);
                 console.log(username)
+                
+                $("#user_name").html('用户名 : ' + username);
+                var roleIds = that.getSelRolsByCache(index);
+                $("input[name='roleCheck']").removeAttr("checked");//取消全选
+
                 SYS.Core.ajaxGet({
                     url: "role/list",
                     data: {
@@ -203,7 +231,7 @@ define(function (require) {
                         if (data.code == 1) {
                             var html = '';
                             //默认勾选功能,根据用户id获取角色ids
-                            var roleIds = that.getSelRols(id);
+                            // var roleIds = that.getSelRols(id);
                             console.log("用户拥有的角色:" + roleIds);
                             html += '' +
                                 '<thead> ' +
@@ -231,7 +259,7 @@ define(function (require) {
                             }
                             html += '</tbody>';
                             $("#user_role_table").html(html);
-                            $("#user_name").html('用户名 : ' + username)
+                            // $("#user_name").html('用户名 : ' + username)
                         } else {
                             $.messager.popup(data.message, 'error');
                         }
@@ -296,6 +324,8 @@ define(function (require) {
                     }
                 })
             },
+
+            // 通过网络获取用户拥有的角色
             getSelRols: function (id) {
                 var arr = new Array();
                 SYS.Core.ajaxGetAsync({
@@ -314,6 +344,18 @@ define(function (require) {
                 });
                 return arr;
             },
+
+            // 通过本地缓存获取，速度更快
+            getSelRolsByCache: function (index) {
+                var arr = new Array();
+                var roles = current_show_data[index].roles;
+                for(var i=0;i<roles.length;i++) {
+                    arr[i] = roles[i].id;
+                }
+                return arr;
+            },
+
+
             toSelfMenu: function (id, username) {
                 $.fn.zTree.destroy("tree");
                 $("#menu_user_name").html(username);

@@ -267,6 +267,9 @@ function loadMenu() {
  */
 
 function logout() {
+
+    var uid = $.cookie("u_id");
+    var u_tokenId = $.cookie("u_tokenId");
     $.dialog.confirm("提示", "确定要退出吗？", function () {
         $.cookie('is_login', '', { path: "/", expires: 7 });
         $.cookie('u_id', '', { path: "/", expires: 7 });
@@ -275,7 +278,6 @@ function logout() {
         location.href = "login.html";
     });
 
-
     $.ajax({
         url: baseUrl + 'logout',
         type: "post",
@@ -283,6 +285,12 @@ function logout() {
         contentType: "application/json; charset=utf-8",
         data: {
            
+        },
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", u_tokenId);
+            request.setRequestHeader("X-User-Id", uid);
+            request.setRequestHeader("Device-Type", "web");
+            request.setRequestHeader("App-Version", "1.0.0");//App-Version abc
         },
         success: function (data) {
             if (data.code == 1) {

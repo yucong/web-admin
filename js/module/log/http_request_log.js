@@ -36,6 +36,7 @@ define(function (require) {
                 var platform = $("#search_platform").val();
                 var search_time_begin = $("#search_time_begin").val();
                 var search_time_end = $("#search_time_end").val();
+                var env = $("#search_env").val();
 
                 //将platform保存到webStorage中
                 if(typeof(Storage) != "undefined"){
@@ -49,7 +50,7 @@ define(function (require) {
                 }
 
                 SYS.Core.ajaxGet({
-                    url: "log/httpRequestLog/list",
+                    url: "log/listHttpRequestLog",
                     data: {
                         page: pageNumber ? pageNumber : 1,
                         size: pageSize ? pageSize : 10,
@@ -61,7 +62,8 @@ define(function (require) {
                         userId: userId ? userId : null,
                         deviceType: deviceType,
                         beginTime : search_time_begin,
-                        endTime : search_time_end
+                        endTime : search_time_end,
+                        env: env
                     },
                     success: function (data) {
                         var obj = {
@@ -101,12 +103,14 @@ define(function (require) {
                                 { field: 'autoId', title: 'AutoId', align: 'center' },
                                 { field: 'requestUrl', title: '请求URL', align: 'center',
                                     formatter(requestUrl, row, index) {
-                                        return requestUrl + " " + row.method; 
+                                        return requestUrl + " " + "<span style='color:blue;font-weight:bold;'>" + row.method + "</span>"; 
                                     }
                                 },
                                 //{ field: 'serverIP', title: '服务器IP', align: 'center' },
                                 //{ field: 'method', title: '请求方式', align: 'center' },
+                                { field: 'env', title: '环境', align: 'center' },
                                 { field: 'clientIP', title: '请求IP', align: 'center' },
+                                { field: 'serverIP', title: '服务IP', align: 'center' },
                                 //{ field: 'platform', title: '请求来源', align: 'center' },
                                 { field: 'userId', title: '用户ID', align: 'center' },
                                 { field: 'deviceType', title: '设备类型', align: 'center' },
@@ -207,13 +211,13 @@ define(function (require) {
                                 var object = getQueryObject(request);
                                 object = JSON.stringify(object);
                                 if (object && object != '') {
-                                    $("#attach_" + i).jsonViewer(JSON.parse(object), { collapsed: false, withQuotes: true });
+                                    $("#attach_" + i).jsonViewer(JSON.parse(object), { collapsed: true, withQuotes: true });
                                 }
                             }
                             if (current_show_data[i].method == 'POST') {
                                 var request = current_show_data[i].requestParam;
                                 if (request && request != '') {
-                                    $("#attach_" + i).jsonViewer(JSON.parse(request), { collapsed: false, withQuotes: true });
+                                    $("#attach_" + i).jsonViewer(request, { collapsed: true, withQuotes: true });
                                 }
                             }
                         }

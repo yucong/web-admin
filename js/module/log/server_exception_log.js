@@ -8,8 +8,8 @@ define(function (require) {
     require('baidueditor');
     window['ZeroClipboard'] = require('zeroclipboard');
     require('multiselect');
-
     require('json-viewer');
+    require('daterangepicker');
 
     $.module("Log.serverException", function () {
         var search_aggregate_status = -1;
@@ -36,6 +36,9 @@ define(function (require) {
                 var deviceType = $("#search_deviceType").val();
                 var errLevel = $("#search_errLevel").val();
                 var platform = $("#search_platform").val();
+                var env = $("#search_env").val();
+                var search_time_begin = $("#search_time_begin").val();
+                var search_time_end = $("#search_time_end").val();
 
                 //将platform保存到webStorage中
                 if(typeof(Storage) != "undefined"){
@@ -49,7 +52,7 @@ define(function (require) {
                 }
 
                 SYS.Core.ajaxGet({
-                    url: "log/serverExceptionLog/list",
+                    url: "log/listServerExceptionLog",
                     data: {
                         page: pageNumber ? pageNumber : 1,
                         size: pageSize ? pageSize : 10,
@@ -60,7 +63,10 @@ define(function (require) {
                         platform: platform,
                         userId: userId ? userId : null,
                         deviceType: deviceType,
-                        errLevel: errLevel
+                        errLevel: errLevel,
+                        env: env,
+                        beginTime : search_time_begin,
+                        endTime : search_time_end
                     },
                     success: function (data) {
                         var obj = {
@@ -92,18 +98,27 @@ define(function (require) {
                                         return requestUrl + " " + row.method; 
                                     }
                                 },
-                                // { field: 'serverIP', title: '服务器IP', align: 'center' },
-                                //{ field: 'method', title: '请求方式', align: 'center' },
-                                { field: 'clientIP', title: '请求IP', align: 'center' },
+                                { field: 'env', title: '环境', align: 'center'  },
+                                { field: 'clientIP', title: '请求IP', align: 'center'  },
                                 { field: 'userId', title: '用户ID', align: 'center' },
-                                { field: 'deviceType', title: '设备类型', align: 'center' },
-                                // { field: 'platform', title: '错误来源', align: 'center' },
+                                { field: 'deviceType', title: '设备类型', align: 'center'  },
                                 {
                                     field: 'errMsg', title: '错误信息', align: 'left',
-                                    formatter: function (errMsg) {
-                                        return '<p style="color:red" id="errMsg_h">' + errMsg + '</P>';
+                                    formatter : function(value, row, index, field){
+                                        return "<span id='errMsg_h' style='color:red;display: block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;' title='" + value + "'>" + value + "</span>";
+                                    },
+                                    cellStyle : function(value, row, index, field){
+                                        return {
+                                            css: {
+                                                "white-space": "nowrap",
+                                                "text-overflow": "ellipsis",
+                                                "overflow": "hidden",
+                                                "max-width":"150px"
+                                            }
+                                        };
                                     }
                                 },
+
                                 {
                                     field: 'createTime', title: '发生时间', align: 'center',
                                     formatter: function (createTime) {
@@ -136,6 +151,10 @@ define(function (require) {
                         that.loadData();
                     }
                 });
+
+                //初始化时间控件
+                SYS.Tool.initDaterangSearch('reportrange', 'search_time_begin', 'search_time_end');
+
                 $("body").on("click", "#errMsg_h", function () {
                     var data = $(this).html();
                     $("#data").val(data);
